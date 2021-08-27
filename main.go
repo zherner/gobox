@@ -22,12 +22,17 @@ func makeProject(project *string) {
     // make dir from project name
     path := fmt.Sprintf("%s/%s", outputDir, *project)
     err := os.Mkdir(path, 0755)
-    if err != nil {
+    // continue if dir already exists
+    if err != nil && !os.IsExist(err) {
         log.Fatalln(err)
     }
 
     // create empty main.go
     writeFile(*project, "main.go", nil)
+
+    // create .gitignore with project name added
+    b := []byte(*project)
+    writeFile(*project, ".gitignore", b)
 }
 
 // writeFile
