@@ -7,10 +7,13 @@ const makeFileContent = `## Generic Makefile
 .DEFAULT_GOAL := build
 
 build:
-	go build -v ./...
+	docker build -t <project_name> ./
+
+run:
+	docker run -it <project_name>
 
 clean:
-	rm -f <project_name>
+	docker rmi <project_name>
 `
 
 // writeDocker writes a Dockerfile to the project output dir from
