@@ -7,12 +7,16 @@ const makeFileContent = `## Generic Makefile
 .DEFAULT_GOAL := build
 
 build:
-	docker build -t <project_name> ./
+	docker-compose build
+
+push:
+	docker-compose push
 
 run:
-	docker run -it <project_name>
+	docker-compose up
 
 clean:
+    docker-compose down
 	docker rmi <project_name>
 `
 
