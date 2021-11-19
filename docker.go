@@ -2,7 +2,9 @@ package main
 
 const dockerFileContent = `## Generic Go dockerfile
 # Stage: build
-FROM golang:1.16-alpine AS buildStage
+
+# https://hub.docker.com/_/golang
+FROM golang:alpine AS buildStage
 
 ENV GOBIN=/go/bin
 WORKDIR /go/src
@@ -12,7 +14,7 @@ COPY ./ ./
 RUN go install -mod=vendor ./...
 
 # Stage: final
-FROM alpine:3.14 AS final
+FROM alpine:latest AS final
 
 RUN apk add \
   curl
@@ -21,7 +23,8 @@ COPY --from=buildStage /go/bin/* /usr/local/bin/
 
 WORKDIR /usr/local/bin
 
-#CMD [""]
+# Sets command to run the first executable in the current dir. This will be the just built golang binary
+CMD find ./ -maxdepth 1 -perm -111 -type f -exec {} \;
 `
 
 const dockerComposeFileContent = `## Generic docker-compose
@@ -35,7 +38,9 @@ services:
       ENV_VAR2: 'NOT_SET'
     build:
       context: .
-    image: IMAGE_URI
+    # command: |-
+    #   requestbot -c 1 -u https://google.com
+    image: IMAGE_URI/NAME
     ports:
       - "8080:8080"
 `
