@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 const dockerFileContent = `## Generic Go dockerfile
 # Stage: build
 
@@ -38,9 +40,9 @@ services:
       ENV_VAR2: 'NOT_SET'
     build:
       context: .
-    # command: |-
-    #   requestbot -c 1 -u https://google.com
-    image: IMAGE_URI/NAME
+    command: |-
+      <project_name>
+    image: <project_name>
     ports:
       - "8080:8080"
 `
@@ -54,7 +56,7 @@ func writeDocker(project, projectPath *string) {
 	b = []byte(dockerFileContent)
 	writeFile(project, projectPath, "Dockerfile", b)
 
-    // create docker-compose from const
-    b = []byte(dockerComposeFileContent)
-    writeFile(project, projectPath, "docker-compose.yaml", b)
+	// create docker-compose from const
+	b = []byte(strings.Replace(dockerComposeFileContent, "<project_name>", *project, -1))
+	writeFile(project, projectPath, "docker-compose.yaml", b)
 }
