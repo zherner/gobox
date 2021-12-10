@@ -58,20 +58,20 @@ tasks:
 
 // writeBuildFIle writes a Make or Task file to the project output dir
 func writeBuildFIle(builderType, project, projectPath *string) {
-    var (
-        b        []byte
-        fileName string
-    )
+	var (
+		b        []byte
+		fileName string
+	)
 
-    // replace <project_name> with project
-    // create Dockerfile from const
-    switch *builderType {
-    case "make":
-        b = []byte(strings.Replace(makeFileContent, "<project_name>", *project, -1))
-        fileName = "Makefile"
-    default:
-        b = []byte(strings.Replace(taskFileContent, "<project_name>", *project, -1))
-        fileName = "Taskfile.yml"
-    }
-    writeFile(project, projectPath, fileName, b)
+	// replace <project_name> with project
+	// create Dockerfile from const
+	switch *builderType {
+	case "make":
+		b = []byte(strings.Replace(makeFileContent, "<project_name>", *project, -1))
+		fileName = "Makefile"
+	default:
+		b = []byte(strings.Replace(taskFileContent, "<project_name>", *project, -1))
+		fileName = "Taskfile.yml"
+	}
+	writeFile(project, projectPath, fileName, b)
 }
